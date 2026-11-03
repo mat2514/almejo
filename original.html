@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYPE 2035: ¿Visión o Burbuja?</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #f59e0b;
+            --primary-btn: #6366f1;
+            --primary-hover: #4f46e5;
+            --text-color: #f8fafc;
+            --subtext-color: #94a3b8;
+            --success: #22c55e;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: var(--subtext-color);
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+
+        .rules-box {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            text-align: left;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .rules-box h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--subtext-color);
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: #0f172a;
+            color: #fff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+
+        button {
+            background-color: var(--primary-btn);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Marcador de jugadores */
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            background-color: #0f172a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .player-card {
+            padding: 8px 15px;
+            border-radius: 6px;
+            background: #1e293b;
+            min-width: 120px;
+        }
+
+        .player-card.active {
+            border: 2px solid var(--accent-color);
+            background: #283548;
+        }
+
+        .player-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .player-score {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Pantalla de juego */
+        .question-card {
+            background-color: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            text-align: left;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: normal;
+            font-size: 0.95rem;
+        }
+
+        .option-btn:hover {
+            background-color: #334155;
+            border-color: var(--accent-color);
+        }
+
+        .feedback-box {
+            background-color: #1e293b;
+            border: 1px solid var(--success);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .feedback-title {
+            color: var(--success);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Portada */
+        .cover-emoji {
+            font-size: 4rem;
+            margin: 10px 0;
+        }
+
+        .cover-title {
+            font-size: 3.2rem;
+            margin: 5px 0;
+        }
+
+        .cover-tagline {
+            color: var(--text-color);
+            font-size: 1.15rem;
+            line-height: 1.5;
+            margin: 20px 0 25px;
+        }
+
+        .cover-rounds {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .cover-rounds span {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            color: var(--subtext-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- PORTADA -->
+    <div id="screen-cover">
+        <div class="cover-emoji">🔮</div>
+        <h1 class="cover-title">HYPE 2035</h1>
+        <div class="subtitle">¿Visión o Burbuja? · El Futuro de la Comunicación</div>
+        <p class="cover-tagline">Un juego para derribar las barreras entre generaciones y construir juntos el futuro de la comunicación.</p>
+        <div class="cover-rounds">
+            <span>1. Reconociendo las barreras</span>
+            <span>2. Aprendiendo a entendernos</span>
+            <span>3. Construyendo soluciones</span>
+            <span>4. El futuro de la comunicación</span>
+        </div>
+        <button onclick="showSetup()">▶ Jugar</button>
+    </div>
+
+    <div id="main-header" class="hidden">
+        <h1>HYPE 2035</h1>
+        <div class="subtitle">¿Visión o Burbuja? · El Futuro de la Comunicación</div>
+    </div>
+
+    <!-- PANTALLA 1: INICIO Y CONFIGURACIÓN -->
+    <div id="screen-setup" class="hidden">
+        <div class="rules-box">
+            <h3>📜 Reglas del Juego:</h3>
+            <ul>
+                <li>Juegan de 2 a 3 jugadores.</li>
+                <li>El juego tiene 4 rondas y 12 situaciones sobre la comunicación entre generaciones.</li>
+                <li>En cada turno, un jugador debe elegir la mejor estrategia y acumular <strong>Puntos de Visión</strong>.</li>
+                <li>Al finalizar las rondas, ¡quien tenga más visión sobre el futuro ganará el juego!</li>
+            </ul>
+        </div>
+
+        <div class="input-group">
+            <label for="num-players">Número de Jugadores (de 2 a 3):</label>
+            <input type="number" id="num-players" min="2" max="3" value="2" onchange="generatePlayerInputs()">
+            
+            <div id="player-inputs-container">
+                <!-- Se generan dinámicamente -->
+            </div>
+        </div>
+
+        <button onclick="startGame()">¡Comenzar el Juego!</button>
+    </div>
+
+    <!-- PANTALLA 2: JUEGO ACTIVO -->
+    <div id="screen-game" class="hidden">
+        <div class="scoreboard" id="scoreboard">
+            <!-- Marcadores se generan dinámicamente -->
+        </div>
+
+        <div class="question-card">
+            <span class="tag" id="card-category">Categoría</span>
+            <div class="question-text" id="card-text">Texto del dilema tecnológico...</div>
+            <div class="options-grid" id="options-container">
+                <!-- Opciones dinámicas -->
+            </div>
+            <div id="feedback" class="feedback-box hidden">
+                <div class="feedback-title" id="feedback-points">+0 Puntos de Visión</div>
+                <div id="feedback-text">Explicación del impacto PESTEL/Futuro...</div>
+                <button onclick="nextTurn()" style="margin-top: 15px;">Siguiente Turno ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: RESULTADOS -->
+    <div id="screen-results" class="hidden">
+        <h2>🏆 ¡Fin de la Partida!</h2>
+        <p class="subtitle">Análisis del Ganador del Futuro</p>
+        <div id="winner-announcement" style="font-size: 1.5rem; color: var(--accent-color); margin: 20px 0; font-weight: bold;"></div>
+        <div class="scoreboard" id="final-scoreboard"></div>
+        <button onclick="location.reload()">Jugar de Nuevo</button>
+    </div>
+</div>
+
+<script>
+    // BANCO DE PREGUNTAS / ESCENARIOS
+    const questions = [
+        {
+            category: "RONDA 1 · RECONOCIENDO LAS BARRERAS",
+            text: "La desconexión familiar: En una reunión familiar, los jóvenes están pendientes de sus celulares y los adultos sienten que ya no comparten tiempo con ellos. ¿Qué estrategia ayudaría a recuperar la comunicación?",
+            options: [
+                { text: "Prohibir completamente el uso de celulares en las reuniones familiares.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: Crear espacios de conversación y actividades en las que todos puedan participar sin distracciones. Crear espacios de interacción permite recuperar las conversaciones y fortalecer los vínculos entre generaciones." },
+                { text: "Crear espacios de conversación y actividades en las que todos puedan participar sin distracciones.", points: 30, feedback: "¡Respuesta correcta! Crear espacios de interacción permite recuperar las conversaciones y fortalecer los vínculos entre generaciones." },
+                { text: "Dejar que cada generación comparta a su manera, sin intervenir.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: Crear espacios de conversación y actividades en las que todos puedan participar sin distracciones. Crear espacios de interacción permite recuperar las conversaciones y fortalecer los vínculos entre generaciones." }
+            ]
+        },
+        {
+            category: "RONDA 1 · RECONOCIENDO LAS BARRERAS",
+            text: "El miedo a la tecnología: Un adulto mayor quiere aprender a utilizar las redes sociales, pero siente vergüenza porque no entiende cómo funcionan. ¿Qué harías?",
+            options: [
+                { text: "Acompañarlo y enseñarle paso a paso, teniendo paciencia con su proceso de aprendizaje.", points: 30, feedback: "¡Respuesta correcta! El acompañamiento y la paciencia ayudan a disminuir las barreras tecnológicas y permiten que los adultos se sientan incluidos." },
+                { text: "Recomendarle que busque tutoriales en internet para aprender solo.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la A: Acompañarlo y enseñarle paso a paso, teniendo paciencia con su proceso de aprendizaje. El acompañamiento y la paciencia ayudan a disminuir las barreras tecnológicas y permiten que los adultos se sientan incluidos." },
+                { text: "Evitar involucrarlo en las redes sociales para que no se sienta confundido.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la A: Acompañarlo y enseñarle paso a paso, teniendo paciencia con su proceso de aprendizaje. El acompañamiento y la paciencia ayudan a disminuir las barreras tecnológicas y permiten que los adultos se sientan incluidos." }
+            ]
+        },
+        {
+            category: "RONDA 1 · RECONOCIENDO LAS BARRERAS",
+            text: "Diferentes formas de comunicarse: Los jóvenes prefieren enviar mensajes, mientras que los adultos prefieren las llamadas. Esto genera dificultades para ponerse de acuerdo. ¿Cómo podrían solucionarlo?",
+            options: [
+                { text: "Hacer que todos utilicen mensajes para facilitar la comunicación.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la C: Acordar qué medio de comunicación utilizar dependiendo de la situación y las preferencias de cada persona. Respetar las preferencias de comunicación permite encontrar puntos medios sin imponer una sola manera de comunicarse." },
+                { text: "Hacer que todos utilicen llamadas porque permiten hablar directamente.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la C: Acordar qué medio de comunicación utilizar dependiendo de la situación y las preferencias de cada persona. Respetar las preferencias de comunicación permite encontrar puntos medios sin imponer una sola manera de comunicarse." },
+                { text: "Acordar qué medio de comunicación utilizar dependiendo de la situación y las preferencias de cada persona.", points: 30, feedback: "¡Respuesta correcta! Respetar las preferencias de comunicación permite encontrar puntos medios sin imponer una sola manera de comunicarse." }
+            ]
+        },
+        {
+            category: "RONDA 2 · APRENDIENDO A ENTENDERNOS",
+            text: "Diferencias en el lenguaje: Un joven utiliza expresiones de internet que sus padres no entienden y esto genera malentendidos. ¿Qué podrían hacer?",
+            options: [
+                { text: "Pedirle al joven que deje de utilizar esas expresiones.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: Crear espacios donde ambas generaciones puedan compartir y explicar sus formas de hablar. Conocer el lenguaje de otras generaciones ayuda a comprenderlas y evita que las diferencias se conviertan en barreras." },
+                { text: "Crear espacios donde ambas generaciones puedan compartir y explicar sus formas de hablar.", points: 30, feedback: "¡Respuesta correcta! Conocer el lenguaje de otras generaciones ayuda a comprenderlas y evita que las diferencias se conviertan en barreras." },
+                { text: "Evitar utilizar expresiones modernas durante las conversaciones familiares.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: Crear espacios donde ambas generaciones puedan compartir y explicar sus formas de hablar. Conocer el lenguaje de otras generaciones ayuda a comprenderlas y evita que las diferencias se conviertan en barreras." }
+            ]
+        },
+        {
+            category: "RONDA 2 · APRENDIENDO A ENTENDERNOS",
+            text: "Los prejuicios generacionales: Un adulto considera que los jóvenes son irresponsables y los jóvenes sienten que los adultos no comprenden sus decisiones. ¿Cómo podrían solucionar este conflicto?",
+            options: [
+                { text: "Organizar conversaciones donde ambas generaciones expresen sus opiniones y escuchen sin juzgar.", points: 30, feedback: "¡Respuesta correcta! La escucha activa permite comprender diferentes perspectivas, disminuir los prejuicios y construir relaciones basadas en el respeto." },
+                { text: "Evitar hablar sobre temas en los que tengan opiniones diferentes.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la A: Organizar conversaciones donde ambas generaciones expresen sus opiniones y escuchen sin juzgar. La escucha activa permite comprender diferentes perspectivas, disminuir los prejuicios y construir relaciones basadas en el respeto." },
+                { text: "Pedirles a los jóvenes que acepten los consejos de los adultos sin cuestionarlos.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la A: Organizar conversaciones donde ambas generaciones expresen sus opiniones y escuchen sin juzgar. La escucha activa permite comprender diferentes perspectivas, disminuir los prejuicios y construir relaciones basadas en el respeto." }
+            ]
+        },
+        {
+            category: "RONDA 2 · APRENDIENDO A ENTENDERNOS",
+            text: "Intereses diferentes: Una familia tiene dificultades para comunicarse porque sus integrantes pertenecen a generaciones diferentes y tienen gustos distintos. ¿Qué podrían hacer?",
+            options: [
+                { text: "Realizar únicamente actividades que les gusten a los adultos.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la C: Crear encuentros donde cada integrante comparta sus intereses y descubran actividades que puedan disfrutar juntos. Compartir intereses permite descubrir puntos en común y generar nuevas oportunidades para conversar." },
+                { text: "Dejar que cada generación realice sus actividades por separado.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la C: Crear encuentros donde cada integrante comparta sus intereses y descubran actividades que puedan disfrutar juntos. Compartir intereses permite descubrir puntos en común y generar nuevas oportunidades para conversar." },
+                { text: "Crear encuentros donde cada integrante comparta sus intereses y descubran actividades que puedan disfrutar juntos.", points: 30, feedback: "¡Respuesta correcta! Compartir intereses permite descubrir puntos en común y generar nuevas oportunidades para conversar." }
+            ]
+        },
+        {
+            category: "RONDA 3 · CONSTRUYENDO SOLUCIONES",
+            text: "La inteligencia artificial: En el futuro, la inteligencia artificial será parte de la vida cotidiana, pero muchos adultos mayores podrían tener dificultades para utilizarla. ¿Qué solución ayudaría a evitar que se sientan excluidos?",
+            options: [
+                { text: "Crear espacios donde los jóvenes enseñen herramientas digitales y los adultos compartan sus experiencias y conocimientos.", points: 30, feedback: "¡Respuesta correcta! El aprendizaje mutuo permite que ambas generaciones aporten conocimientos y se sientan parte de los cambios tecnológicos." },
+                { text: "Dejar que cada generación aprenda a utilizar la inteligencia artificial por separado.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la A: Crear espacios donde los jóvenes enseñen herramientas digitales y los adultos compartan sus experiencias y conocimientos. El aprendizaje mutuo permite que ambas generaciones aporten conocimientos y se sientan parte de los cambios tecnológicos." },
+                { text: "Evitar que los adultos mayores utilicen herramientas tecnológicas que no conocen.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la A: Crear espacios donde los jóvenes enseñen herramientas digitales y los adultos compartan sus experiencias y conocimientos. El aprendizaje mutuo permite que ambas generaciones aporten conocimientos y se sientan parte de los cambios tecnológicos." }
+            ]
+        },
+        {
+            category: "RONDA 3 · CONSTRUYENDO SOLUCIONES",
+            text: "La falta de escucha: Un joven intenta contarle un problema a un adulto, pero siente que este siempre lo interrumpe y le da consejos sin escucharlo. ¿Qué debería cambiar?",
+            options: [
+                { text: "El joven debería dejar de compartir sus problemas para evitar discusiones.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: El adulto debería escuchar primero, hacer preguntas y comprender la situación antes de dar consejos. Escuchar antes de responder permite que las personas se sientan comprendidas y fortalece la confianza." },
+                { text: "El adulto debería escuchar primero, hacer preguntas y comprender la situación antes de dar consejos.", points: 30, feedback: "¡Respuesta correcta! Escuchar antes de responder permite que las personas se sientan comprendidas y fortalece la confianza." },
+                { text: "Ambos deberían evitar conversaciones sobre problemas personales.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: El adulto debería escuchar primero, hacer preguntas y comprender la situación antes de dar consejos. Escuchar antes de responder permite que las personas se sientan comprendidas y fortalece la confianza." }
+            ]
+        },
+        {
+            category: "RONDA 3 · CONSTRUYENDO SOLUCIONES",
+            text: "Recuperando las tradiciones: Los adultos sienten que los jóvenes están perdiendo las tradiciones familiares, mientras que los jóvenes consideran que algunas costumbres ya no conectan con sus intereses. ¿Qué podrían hacer?",
+            options: [
+                { text: "Mantener todas las tradiciones exactamente como se han realizado siempre.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la C: Crear nuevas formas de compartir las tradiciones, combinándolas con actividades e intereses actuales. Adaptar las tradiciones permite conservar los conocimientos y recuerdos familiares, mientras se crean nuevas experiencias para las generaciones actuales." },
+                { text: "Reemplazar las tradiciones por actividades modernas.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la C: Crear nuevas formas de compartir las tradiciones, combinándolas con actividades e intereses actuales. Adaptar las tradiciones permite conservar los conocimientos y recuerdos familiares, mientras se crean nuevas experiencias para las generaciones actuales." },
+                { text: "Crear nuevas formas de compartir las tradiciones, combinándolas con actividades e intereses actuales.", points: 30, feedback: "¡Respuesta correcta! Adaptar las tradiciones permite conservar los conocimientos y recuerdos familiares, mientras se crean nuevas experiencias para las generaciones actuales." }
+            ]
+        },
+        {
+            category: "RONDA 4 · EL FUTURO DE LA COMUNICACIÓN",
+            text: "Una comunidad más conectada: Una institución educativa quiere mejorar la relación entre los jóvenes y los adultos mayores de su comunidad. ¿Qué proyecto debería implementar?",
+            options: [
+                { text: "Crear encuentros intergeneracionales donde puedan compartir experiencias, aprender habilidades y conversar.", points: 30, feedback: "¡Respuesta correcta! Los encuentros intergeneracionales generan experiencias compartidas y permiten que las personas se conozcan más allá de sus diferencias." },
+                { text: "Organizar actividades separadas para cada generación según sus intereses.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la A: Crear encuentros intergeneracionales donde puedan compartir experiencias, aprender habilidades y conversar. Los encuentros intergeneracionales generan experiencias compartidas y permiten que las personas se conozcan más allá de sus diferencias." },
+                { text: "Crear un grupo de mensajería para que todos puedan comunicarse por internet.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la A: Crear encuentros intergeneracionales donde puedan compartir experiencias, aprender habilidades y conversar. Los encuentros intergeneracionales generan experiencias compartidas y permiten que las personas se conozcan más allá de sus diferencias." }
+            ]
+        },
+        {
+            category: "RONDA 4 · EL FUTURO DE LA COMUNICACIÓN",
+            text: "La comunicación del futuro: Imagina que puedes crear una herramienta para mejorar la comunicación entre generaciones. ¿Cuál sería la mejor propuesta?",
+            options: [
+                { text: "Una red social exclusiva para jóvenes donde puedan compartir sus experiencias.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: Una plataforma que conecte a jóvenes y adultos mediante conversaciones, intercambio de conocimientos y actividades compartidas. Una herramienta que promueva la interacción y el aprendizaje mutuo puede convertir la tecnología en un puente entre generaciones." },
+                { text: "Una plataforma que conecte a jóvenes y adultos mediante conversaciones, intercambio de conocimientos y actividades compartidas.", points: 30, feedback: "¡Respuesta correcta! Una herramienta que promueva la interacción y el aprendizaje mutuo puede convertir la tecnología en un puente entre generaciones." },
+                { text: "Una aplicación que permita a los adultos vigilar las actividades digitales de los jóvenes.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: Una plataforma que conecte a jóvenes y adultos mediante conversaciones, intercambio de conocimientos y actividades compartidas. Una herramienta que promueva la interacción y el aprendizaje mutuo puede convertir la tecnología en un puente entre generaciones." }
+            ]
+        },
+        {
+            category: "RONDA 4 · EL FUTURO DE LA COMUNICACIÓN",
+            text: "El cambio empieza hoy: Si tuvieras la oportunidad de cambiar un hábito que está causando la pérdida de comunicación entre generaciones, ¿cuál sería la mejor iniciativa?",
+            options: [
+                { text: "Promover que las personas pasen menos tiempo con sus dispositivos y más tiempo compartiendo con los demás.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: Crear espacios de escucha, respeto y diálogo donde las personas puedan expresar sus ideas sin sentirse juzgadas. La comunicación mejora cuando las personas se sienten escuchadas, respetadas y libres de expresar sus diferencias." },
+                { text: "Crear espacios de escucha, respeto y diálogo donde las personas puedan expresar sus ideas sin sentirse juzgadas.", points: 30, feedback: "¡Respuesta correcta! La comunicación mejora cuando las personas se sienten escuchadas, respetadas y libres de expresar sus diferencias." },
+                { text: "Promover que todas las generaciones adopten las mismas formas de pensar y comunicarse.", points: 0, feedback: "Respuesta incorrecta. La opción correcta era la B: Crear espacios de escucha, respeto y diálogo donde las personas puedan expresar sus ideas sin sentirse juzgadas. La comunicación mejora cuando las personas se sienten escuchadas, respetadas y libres de expresar sus diferencias." }
+            ]
+        }
+    ];
+
+    let players = [];
+    let currentPlayerIndex = 0;
+    let round = 1;
+    let maxRoundsPerPlayer = 2; // Se recalcula al iniciar: las 12 preguntas se reparten entre los jugadores
+
+    function clampPlayers() {
+        const input = document.getElementById('num-players');
+        let count = parseInt(input.value);
+        if (isNaN(count) || count < 2) count = 2;
+        if (count > 3) count = 3;
+        input.value = count;
+        return count;
+    }
+
+    function showSetup() {
+        document.getElementById('screen-cover').classList.add('hidden');
+        document.getElementById('main-header').classList.remove('hidden');
+        document.getElementById('screen-setup').classList.remove('hidden');
+    }
+
+    function generatePlayerInputs() {
+        const count = clampPlayers();
+        const container = document.getElementById('player-inputs-container');
+        container.innerHTML = '';
+
+        for (let i = 1; i <= count; i++) {
+            container.innerHTML += `
+                <input type="text" id="player-${i}" placeholder="Nombre del Jugador ${i}" value="Jugador ${i}">
+            `;
+        }
+    }
+
+    // Inicializar inputs
+    generatePlayerInputs();
+
+    function startGame() {
+        const count = clampPlayers();
+        players = [];
+        maxRoundsPerPlayer = Math.floor(questions.length / count);
+
+        for (let i = 1; i <= count; i++) {
+            const name = document.getElementById(`player-${i}`).value || `Jugador ${i}`;
+            players.push({ name: name, score: 0, turnsTaken: 0 });
+        }
+
+        document.getElementById('screen-setup').classList.add('hidden');
+        document.getElementById('screen-game').classList.remove('hidden');
+
+        updateScoreboard();
+        loadQuestion();
+    }
+
+    function updateScoreboard() {
+        const board = document.getElementById('scoreboard');
+        board.innerHTML = '';
+        players.forEach((p, idx) => {
+            const activeClass = idx === currentPlayerIndex ? 'active' : '';
+            board.innerHTML += `
+                <div class="player-card ${activeClass}">
+                    <div class="player-name">${p.name}</div>
+                    <div class="player-score">${p.score} pts</div>
+                </div>
+            `;
+        });
+    }
+
+    function loadQuestion() {
+        document.getElementById('feedback').classList.add('hidden');
+        const qIndex = players.reduce((acc, p) => acc + p.turnsTaken, 0) % questions.length;
+        const q = questions[qIndex];
+
+        document.getElementById('card-category').innerText = q.category;
+        document.getElementById('card-text').innerText = `${players[currentPlayerIndex].name}, es tu turno: "${q.text}"`;
+
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+
+        q.options.forEach((opt, idx) => {
+            optionsContainer.innerHTML += `
+                <button class="option-btn" onclick="selectOption(${opt.points}, '${opt.feedback.replace(/'/g, "\\'")}')">${opt.text}</button>
+            `;
+        });
+    }
+
+    function selectOption(points, feedback) {
+        players[currentPlayerIndex].score += points;
+        players[currentPlayerIndex].turnsTaken += 1;
+
+        // Deshabilitar botones de opción
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(btn => btn.disabled = true);
+
+        // Mostrar retroalimentación
+        const feedbackBox = document.getElementById('feedback');
+        document.getElementById('feedback-points').innerText = `+${points} Puntos de Visión`;
+        document.getElementById('feedback-text').innerText = feedback;
+        feedbackBox.classList.remove('hidden');
+
+        updateScoreboard();
+    }
+
+    function nextTurn() {
+        // Verificar si todos los jugadores terminaron sus rondas
+        const totalTurns = players.reduce((acc, p) => acc + p.turnsTaken, 0);
+        if (totalTurns >= players.length * maxRoundsPerPlayer) {
+            endGame();
+            return;
+        }
+
+        // Pasar al siguiente jugador
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+        updateScoreboard();
+        loadQuestion();
+    }
+
+    function endGame() {
+        document.getElementById('screen-game').classList.add('hidden');
+        document.getElementById('screen-results').classList.remove('hidden');
+
+        // Ordenar por puntaje
+        players.sort((a, b) => b.score - a.score);
+
+        const winner = players[0];
+        document.getElementById('winner-announcement').innerText = `🏆 ¡Ganador: ${winner.name} con ${winner.score} Puntos de Visión!`;
+
+        const finalBoard = document.getElementById('final-scoreboard');
+        finalBoard.innerHTML = '';
+        players.forEach((p, idx) => {
+            finalBoard.innerHTML += `
+                <div class="player-card">
+                    <div class="player-name">#${idx + 1} ${p.name}</div>
+                    <div class="player-score">${p.score} pts</div>
+                </div>
+            `;
+        });
+    }
+</script>
+
+</body>
+</html>
